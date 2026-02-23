@@ -1,13 +1,12 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled
 from openai import OpenAI
 import os
 
 app = FastAPI()
 
 # --- CONFIGURATION ---
-# Assumes OPENAI_API_KEY is set in environment
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 class VideoRequest(BaseModel):
@@ -19,7 +18,13 @@ async def summarize_video(request: VideoRequest):
     
     try:
         # 1. Get Transcript
-        transcript_list = YouTubeTranscriptApi.get_transcript(request.video_id)
+        # Note: If no transcript, this raises TranscriptsDisabled or NoTranscriptFound
+        try:
+            transcript_list = YouTubeTranscriptApi.get_transcript(request.video_id)
+        except Exception as e:
+            # Fallback: Maybe try fetching list first?
+            print(f"[!] Primary fetch failed: {e}. Trying list...")
+            transcript_list = YouTubeTranscriptApi.list_transcripts(request.video_id).find_generated_transcript(['en']).fetch()
         
         # Combine text chunks (limit to ~15k chars to save tokens)
         full_text = " ".join([item['text'] for item in transcript_list])
@@ -41,6 +46,7 @@ async def summarize_video(request: VideoRequest):
 
     except Exception as e:
         print(f"[!] Error: {e}")
+        # Return strict error so extension knows it failed
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
