@@ -1,8 +1,17 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+import youtube_transcript_api
 from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled
 from openai import OpenAI
 import os
+import sys
+
+# DEBUG: Print library location and version
+print(f"DEBUG: youtube_transcript_api file: {youtube_transcript_api.__file__}")
+try:
+    print(f"DEBUG: YouTubeTranscriptApi attributes: {dir(YouTubeTranscriptApi)}")
+except:
+    pass
 
 app = FastAPI()
 
