@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Tube2Text - Video Summarizer",
+  "version": "1.0",
+  "description": "Summarize YouTube videos instantly via local LLM backend.",
+  "permissions": ["activeTab", "scripting"],
+  "host_permissions": ["*://*.youtube.com/*", "http://localhost:8000/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/*"],
+      "js": ["content.js"]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; width: 320px; padding: 10px; }
+    h2 { font-size: 16px; margin-bottom: 5px; color: #333; }
+    button { 
+      background: #cc0000; color: white; border: none; padding: 8px 16px; 
+      border-radius: 4px; cursor: pointer; width: 100%; font-size: 14px;
+    }
+    button:disabled { background: #ccc; cursor: not-allowed; }
+    #output { 
+      margin-top: 10px; padding: 10px; background: #f9f9f9; 
+      border: 1px solid #ddd; border-radius: 4px; font-size: 12px;
+      white-space: pre-wrap; min-height: 100px; max-height: 300px; overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <h2>Tube2Text</h2>
+  <button id="summarize-btn">Summarize Video</button>
+  <div id="output">Waiting for video...</div>
+  <script src="popup.js"></script>
+</body>
+</html>
